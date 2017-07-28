@@ -1,12 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
 {% if error %}
 <p class="error">{{error}}</p>
 {% endif %}
 
-<p>{{term.label}}</p>
-<p>{{term.annotation}}</p>
+<div class="definition">
+    <h4>{{term.label}}</h4>
+    <p>{{term.annotation}}</p>
+</div>
 
-<form method="POST" action="{% url 'term_review' %}">
-{% csrf_token %}
-{{form.as_p}}
-<input type="submit" value="Next">
+<form class="form" method="POST" action="{% url 'term_review' %}">
+    {% csrf_token %}
+    {{form.as_p}}
+    <input type="submit" value="Next">
 </form>
+{% endblock %}
