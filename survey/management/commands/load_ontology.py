@@ -14,19 +14,24 @@ class Command(BaseCommand):
         g.load(options['ontology'])
         annotation = URIRef(options['annotation_uri'])
         annotation_label = g.value(annotation, RDFS.label)
-        yN = input("""Are you sure you want to perform this import
+        yN = input("""
+Are you sure you want to perform this import
 Ontology: {}
 Annotation: {}
 Annotation Label: {}
-[y/N]""".format(options['ontology'], options['annotation_uri'], annotation_label))
+[y/N] """.format(options['ontology'], options['annotation_uri'], annotation_label))
         if yN == 'y':
-            for (uri, RDF.type, OWL.Class) in g:
-                label = g.value(uri, RDFS.label)
-                annotation_value = g.value(uri, annotation)
-                if label != None and annotation_value != None:
-                    print('{} - {}'.format(label, annotation_value))
-                    Term.objects.create(label=label,
-                                        annotation=annotation_value,
-                                        uri=uri)
+            query = g.query("""PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+select ?uri ?label ?annotation {{
+    ?uri a owl:Class;
+       rdfs:label ?label;
+       <{}> ?annotation .
+}}
+            """.format(annotation))
+            for (uri, label, annotation_value) in query:
+                Term.objects.create(label=label,
+                                    annotation=annotation_value,
+                                    uri=uri)
         else:
             print('exiting')
