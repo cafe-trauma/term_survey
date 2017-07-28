@@ -1,0 +1,5 @@
+Django==1.11.3
+isodate==0.5.4
+pyparsing==2.2.0
+pytz==2017.2
+rdflib==4.2.2
