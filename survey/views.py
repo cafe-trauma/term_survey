@@ -4,6 +4,7 @@ from django import forms
 from survey.models import *
 from random import randint
 from django.db.utils import IntegrityError
+from django.db.models import Count
 
 # Create your views here.
 class ResponseForm(forms.Form):
@@ -52,9 +53,13 @@ def term_review(request):
     if num_reviews >= max_reviews:
         return render(request, 'thank_you.html')
 
-    # get a random term to review
-    count = Term.objects.count()
+    # get a random term to review from the terms with least responses
+    query = Term.objects.exclude(response__respondant=resp)
+    query = query.annotate(num_reviews=Count('response'))
+    lowest_reviews = query.order_by('num_reviews').first().num_reviews
+    query = query.filter(num_reviews=lowest_reviews)
+    count = query.count()
     random_index = randint(0, count - 1)
-    term = Term.objects.all()[random_index]
+    term = query[random_index]
     form = ResponseForm({'term_id': term.id})
     return render(request, 'review.html', {'error': error, 'term': term, 'form': form})
