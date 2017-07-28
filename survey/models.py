@@ -10,11 +10,10 @@ class Term(models.Model):
         return self.label
 
 class Respondant(models.Model):
-    identifier = models.CharField(max_length=200)
     additional_comments = models.TextField(blank=True)
 
     def __str__(self):
-        return self.identifier
+        return str(self.id)
 
 class Response(models.Model):
     term = models.ForeignKey('term', on_delete=models.CASCADE)
@@ -22,6 +21,9 @@ class Response(models.Model):
     is_good = models.BooleanField()
     proposal = models.TextField(blank=True)
     comment = models.TextField(blank=True)
+
+    class Meta:
+        unique_together = ('term', 'respondant')
 
     def __str__(self):
         return "{} - {} - {}".format(self.is_good, self.term, self.respondant)

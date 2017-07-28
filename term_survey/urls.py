@@ -15,7 +15,11 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from survey import views
 
 urlpatterns = [
+    url(r'^$', views.landing_page, name='landing_page'),
+    url(r'^terms/', views.term_review, name='term_review'),
+    url(r'^reset/', views.clear_session, name='clear_session'),
     url(r'^admin/', admin.site.urls),
 ]

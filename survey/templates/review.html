@@ -1,0 +1,12 @@
+{% if error %}
+<p class="error">{{error}}</p>
+{% endif %}
+
+<p>{{term.label}}</p>
+<p>{{term.annotation}}</p>
+
+<form method="POST" action="{% url 'term_review' %}">
+{% csrf_token %}
+{{form.as_p}}
+<input type="submit" value="Next">
+</form>
