@@ -3,5 +3,7 @@
 <h1>{{settings.header}}</h1>
 <img src="{{settings.logo}}">
 <p>{{settings.welcome_message}}</p>
-<a href="{% url 'term_review' %}">Start Review</a>
+<p>
+<a href="{% url 'term_review' %}">Start Review</a> - {{settings.terms_per_user}} terms to review.
+</p>
 {% endblock %}
