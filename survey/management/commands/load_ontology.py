@@ -27,6 +27,7 @@ select ?uri ?label ?annotation {{
     ?uri a owl:Class;
        rdfs:label ?label;
        <{}> ?annotation .
+    FILTER NOT EXISTS {{ ?uri owl:deprecated true }} .
 }}
             """.format(annotation))
             for (uri, label, annotation_value) in query:
