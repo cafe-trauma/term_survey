@@ -6,18 +6,28 @@ from random import randint
 from django.db.utils import IntegrityError
 from django.db.models import Count
 
-# Create your views here.
+
+CHOICES = ((True, 'Good'), (False, 'Bad'))
 class ResponseForm(forms.Form):
-    good = forms.BooleanField(label='Is this definition good', required=False)
-    comment = forms.CharField(widget=forms.Textarea, label='Comments', required=False)
+    good = forms.ChoiceField(label='Is this definition good',
+                             required=True,
+                             choices=CHOICES,
+                             widget=forms.RadioSelect(attrs={'class': 'inline'}))
+    proposal = forms.CharField(widget=forms.Textarea(),
+                               label='Propose New Definition',
+                               required=False)
+    comment = forms.CharField(widget=forms.Textarea,
+                              label='Comments',
+                              required=False)
     term_id = forms.IntegerField(widget=forms.HiddenInput)
 
 def landing_page(request):
+    settings = Setting.objects.all().first()
     r = request.session.get('id', False)
     if r == False:
         resp = Respondant.objects.create()
         request.session['id'] = resp.id
-    return render(request, 'landing.html', {'token': r})
+    return render(request, 'landing.html', {'token': r, 'settings': settings})
 
 def clear_session(request):
     try:
@@ -43,15 +53,17 @@ def term_review(request):
                 Response.objects.create(respondant=resp,
                                         term=term,
                                         is_good=form.cleaned_data['good'],
+                                        proposal=form.cleaned_data['proposal'],
                                         comment=form.cleaned_data['comment'])
             except IntegrityError:
                 error = "You already submitted a review for that term"
 
     # check to see if user has submitted enough reviews
     max_reviews = Setting.objects.all().first().terms_per_user
-    num_reviews = Response.objects.filter(respondant=resp).count()
+    users_reviews = Response.objects.filter(respondant=resp)
+    num_reviews = users_reviews.count()
     if num_reviews >= max_reviews:
-        return render(request, 'thank_you.html')
+        return render(request, 'thank_you.html', {'reviews': users_reviews})
 
     # get a random term to review from the terms with least responses
     query = Term.objects.exclude(response__respondant=resp)
@@ -62,4 +74,5 @@ def term_review(request):
     random_index = randint(0, count - 1)
     term = query[random_index]
     form = ResponseForm({'term_id': term.id})
+    form['proposal'].css_classes('proposal')
     return render(request, 'review.html', {'error': error, 'term': term, 'form': form})

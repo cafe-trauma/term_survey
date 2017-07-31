@@ -2,5 +2,24 @@
 {% block content %}
 <p>Thank you for your participation.</p>
 
+<table>
+    <tr>
+        <th>Term</th>
+        <th>Good</th>
+        <th>Proposal</th>
+        <th>Comment</th>
+    </tr>
+    {% for review in reviews %}
+    <tr>
+        <td>{{review.term.label}}</td>
+        <td>{% if review.is_good %}✔{% else %}✖{% endif %}</td>
+        <td>{{review.proposal}}</td>
+        <td>{{review.comment}}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<br/>
+
 <a href="{% url 'clear_session' %}">Perform another term review?</a>
 {% endblock %}

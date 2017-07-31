@@ -1,4 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
+<h1>{{settings.header}}</h1>
+<img src="{{settings.logo}}">
+<p>{{settings.welcome_message}}</p>
 <a href="{% url 'term_review' %}">Start Review</a>
 {% endblock %}
