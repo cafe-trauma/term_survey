@@ -59,7 +59,8 @@ def term_review(request):
                 error = "You already submitted a review for that term"
 
     # check to see if user has submitted enough reviews
-    max_reviews = Setting.objects.all().first().terms_per_user
+    settings = Setting.objects.all().first()
+    max_reviews = settings.terms_per_user
     users_reviews = Response.objects.filter(respondant=resp)
     num_reviews = users_reviews.count()
     if num_reviews >= max_reviews:
@@ -75,4 +76,9 @@ def term_review(request):
     term = query[random_index]
     form = ResponseForm({'term_id': term.id})
     form['proposal'].css_classes('proposal')
-    return render(request, 'review.html', {'error': error, 'term': term, 'form': form})
+    return render(request, 'review.html', {'error': error,
+                                           'max_reviews': max_reviews,
+                                           'num_reviews': num_reviews,
+                                           'percent': (num_reviews / max_reviews) * 100,
+                                           'term': term,
+                                           'form': form})

@@ -26,6 +26,12 @@
     {{form.term_id}}
     <input class="next btn" type="submit" value="Next" style="float: right">
 </form>
+<div style="text-align:center;border: 1px solid #ccc;">
+    <span style="position:absolute;{% if percent >= 55 %}color:white{% endif %}">
+        {{percent | floatformat}}%</span>
+    <div style="width:{{percent}}%;background-color:#5E81C0;text-align:center;height:1.5em">
+    </div>
+</div>
 <script>
     var bad = document.getElementById("id_good_1");
     var good = document.getElementById("id_good_0");
