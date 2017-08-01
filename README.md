@@ -1,4 +1,4 @@
-# term_survey
+# Ontology Annotation Term Survey - OATS
 This is a survey tool for having people review annotations such as definitions for an OWL Ontology.
 
 ## Installation and Use
