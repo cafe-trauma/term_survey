@@ -11,20 +11,26 @@
 
 <form class="form" method="POST" action="{% url 'term_review' %}">
     {% csrf_token %}
-    <div style="inline">
-        {{form.good.label_tag}}
-        {{form.good}}
+    <div style="display: flex; justify-content: space-between">
+        <div>
+            {{form.good.label_tag}}
+            {{form.good}}
+        </div>
+        <input class="next btn" type="submit" value="Next" style="align-self: flex-end">
     </div>
-    <div id="proposal" style="display: none">
-        {{form.proposal.label_tag}}
-        {{form.proposal}}
-    </div>
-    <div style="display: inline-grid">
-        {{form.comment.label_tag}}
-        {{form.comment}}
+    <div style="display: flex">
+        <div id="proposal" style="display: none">
+            <div style="display: flex; flex-direction: column">
+                {{form.proposal.label_tag}}
+                {{form.proposal}}
+            </div>
+        </div>
+        <div style="display: flex; flex-direction: column">
+            {{form.comment.label_tag}}
+            {{form.comment}}
+        </div>
     </div>
     {{form.term_id}}
-    <input class="next btn" type="submit" value="Next" style="float: right">
 </form>
 <div style="text-align:center;border: 1px solid #ccc;">
     <span style="position:absolute;{% if percent >= 55 %}color:white{% endif %}">
@@ -33,14 +39,17 @@
     </div>
 </div>
 <script>
-    var bad = document.getElementById("id_good_1");
-    var good = document.getElementById("id_good_0");
-    var proposal = document.getElementById("proposal");
-    bad.addEventListener("click", function(event){
-        proposal.style.display = 'inline-grid';
-    });
-    good.addEventListener("click", function(event){
-        proposal.style.display = 'none';
+    document.addEventListener("DOMContentLoaded", function(event){
+        console.log("loaded");
+        var bad = document.getElementById("id_good_1");
+        var good = document.getElementById("id_good_0");
+        var proposal = document.getElementById("proposal");
+        bad.addEventListener("click", function(event){
+            proposal.style.display = 'inherit';
+        });
+        good.addEventListener("click", function(event){
+            proposal.style.display = 'none';
+        });
     });
 </script>
 {% endblock %}
