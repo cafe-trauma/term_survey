@@ -7,9 +7,9 @@ from django.db.utils import IntegrityError
 from django.db.models import Count
 
 
-CHOICES = ((True, 'Good'), (False, 'Bad'))
+CHOICES = ((True, 'Yes'), (False, 'No'), ('---', "I don't know"))
 class ResponseForm(forms.Form):
-    good = forms.ChoiceField(label='Is this definition good',
+    good = forms.ChoiceField(label='Is this a good definition?',
                              required=True,
                              choices=CHOICES,
                              widget=forms.RadioSelect(attrs={'class': 'inline'}))
@@ -50,6 +50,8 @@ def term_review(request):
         if form.is_valid():
             term = Term.objects.get(pk=form.cleaned_data['term_id'])
             try:
+                if form.cleaned_data['good'] == '---':
+                    form.cleaned_data['good'] = None
                 Response.objects.create(respondant=resp,
                                         term=term,
                                         is_good=form.cleaned_data['good'],
@@ -57,6 +59,8 @@ def term_review(request):
                                         comment=form.cleaned_data['comment'])
             except IntegrityError:
                 error = "You already submitted a review for that term"
+        else:
+            print(form.errors)
 
     # check to see if user has submitted enough reviews
     settings = Setting.objects.all().first()

@@ -12,7 +12,7 @@
     {% for review in reviews %}
     <tr>
         <td>{{review.term.label}}</td>
-        <td>{% if review.is_good %}✔{% else %}✖{% endif %}</td>
+        <td>{% if review.is_good %}✔{% elif review.is_good == False %}✖{% endif %}</td>
         <td>{{review.proposal}}</td>
         <td>{{review.comment}}</td>
     </tr>

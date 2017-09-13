@@ -18,7 +18,7 @@ class Respondant(models.Model):
 class Response(models.Model):
     term = models.ForeignKey('term', on_delete=models.CASCADE)
     respondant = models.ForeignKey('respondant', on_delete=models.CASCADE)
-    is_good = models.BooleanField()
+    is_good = models.NullBooleanField(blank=True, null=True, default=None)
     proposal = models.TextField(blank=True)
     comment = models.TextField(blank=True)
 
