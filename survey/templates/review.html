@@ -13,13 +13,15 @@
     {% csrf_token %}
     <div style="display: flex; justify-content: space-between">
         <div>
-            {{form.good.label_tag}}
-            {{form.good}}
+            <div class="good_row">
+                {{form.good.label_tag}}
+                {{form.good}}
+                <input class="next btn" type="submit" value="Next">
+            </div>
         </div>
-        <input class="next btn" type="submit" value="Next" style="align-self: flex-end">
     </div>
     <div style="display: flex">
-        <div id="proposal" style="display: none">
+        <div id="proposal">
             <div style="display: flex; flex-direction: column">
                 {{form.proposal.label_tag}}
                 {{form.proposal}}
@@ -38,17 +40,4 @@
     <div style="width:{{percent}}%;background-color:#5E81C0;text-align:center;height:1.5em">
     </div>
 </div>
-<script>
-    document.addEventListener("DOMContentLoaded", function(event){
-        var bad = document.getElementById("id_good_1");
-        var good = document.getElementById("id_good_0");
-        var proposal = document.getElementById("proposal");
-        bad.addEventListener("click", function(event){
-            proposal.style.display = 'inherit';
-        });
-        good.addEventListener("click", function(event){
-            proposal.style.display = 'none';
-        });
-    });
-</script>
 {% endblock %}

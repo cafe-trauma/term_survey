@@ -7,17 +7,17 @@ from django.db.utils import IntegrityError
 from django.db.models import Count
 
 
-CHOICES = ((True, 'Yes'), (False, 'No'), ('---', "I don't know"))
+CHOICES = ((True, 'The term and its definition are appropriate.'), (False, 'The term and its definition are inappropriate.'), ('---', "Unable to say"))
 class ResponseForm(forms.Form):
-    good = forms.ChoiceField(label='Is this a good definition?',
+    good = forms.ChoiceField(label='For the term and its definition provided above, please select one of the following options:',
                              required=True,
                              choices=CHOICES,
                              widget=forms.RadioSelect(attrs={'class': 'inline'}))
     proposal = forms.CharField(widget=forms.Textarea(),
-                               label='Propose New Definition',
+                               label='If the definition for the term above is inappropriate, please propose a new definition:',
                                required=False)
     comment = forms.CharField(widget=forms.Textarea,
-                              label='Comments',
+                              label='Please provide any comments about the above term and its definition, including why the definition may have been inappropriate:',
                               required=False)
     term_id = forms.IntegerField(widget=forms.HiddenInput)
 
